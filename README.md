@@ -1,4 +1,4 @@
-# Ex.No:3b To create a two screens , first screen will take one number input from user. After click on Factorial button, second screen will open and it should display factorial of the same number using Explicit Intents.
+# Ex.No:4 To create a two screens , first screen will take one number input from user. After click on Factorial button, second screen will open and it should display factorial of the same number using Explicit Intents.
 
 
 ## AIM:
@@ -11,15 +11,15 @@ To create a two screens , first screen will take one number input from user. Aft
 Latest Version Android Studio
 
 ## ALGORITHM:
-```
-Step 1: Open Android Stdio and then click on File -> New -> New project.
-Step 2: Then type the Application name as ImplicitIntent and click Next.
-Step 3: Then select the Minimum SDK as shown below and click Next.
-Step 4: Then select the Empty Activity and click Next. Finally click Finish.
-Step 5: Design layout in activity_main.xml.
-Step 6: Display message give in MainActivity file.
-Step 7: Save and run the application.
-```
+Step 1: Create a New Project in Android Studio
+
+Step 2: Working with the activity_main.xml File
+
+Step 3: Working with the MainActivity File
+
+Step 4: Working with the activity_main2.xml File
+
+Step 5: Working with the MainActivity2 File
 
 
 ## PROGRAM:
@@ -27,133 +27,162 @@ Step 7: Save and run the application.
 /*
 Program to print the text “ExplicitIntent”.
 Developed by: ARPAN BARDHAN
-Registeration Number : 212222040013
+Registeration Number :212222040013
 */
 ```
-activity_main.xml
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.148" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to Next Activity"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.209" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+## MainActivity.java
 ```
-activity_main2.xml
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity2">
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to Home Activity"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
-```
-MainActivity.java
-```java
-package com.example.explicitindent;
-
+package com.example.explicitintent;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.KeyEventDispatcher;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
+
+    private EditText editTextNumber;
+    private Button buttonFactorial;
+    private Button buttonExplicit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        editTextNumber = findViewById(R.id.editTextNumber);
+        buttonFactorial = findViewById(R.id.buttonFactorial);
+        buttonExplicit = findViewById(R.id.buttonExplicit);
+
+        buttonFactorial.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), MainActivity2.class);
-                startActivity(i);
+            public void onClick(View v) {
+                calculateFactorial();
+            }
+        });
+```
+```
+        buttonExplicit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSecondActivity();
             }
         });
     }
 
+    private void calculateFactorial() {
+        int number = Integer.parseInt(editTextNumber.getText().toString());
+        int factorial = 1;
+        for (int i = 1; i <= number; i++) {
+            factorial *= i;
+        }
+        openSecondActivityWithFactorial(factorial);
+    }
+
+    private void openSecondActivityWithFactorial(int factorial) {
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra("factorial", factorial);
+        startActivity(intent);
+    }
+
+    private void openSecondActivity() {
+        Intent intent = new Intent(this, SecondActivity.class);
+        startActivity(intent);
+    }
 }
 ```
-
-MainActivity2.java
-```java
-package com.example.explicitindent;
+## SecondActivity.java
+```
+package com.example.explicitintent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
-public class MainActivity2 extends AppCompatActivity {
+import android.widget.TextView;
+
+public class SecondActivity extends AppCompatActivity {
+
+    private TextView textViewResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_second);
 
-        Button button = (Button) findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-            }
-        });
+        textViewResult = findViewById(R.id.textViewResult);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey("factorial")) {
+            int factorial = extras.getInt("factorial");
+            textViewResult.setText("Factorial: " + factorial);
+        } else {
+            textViewResult.setText("Factorial not calculated");
+        }
     }
-
-
 }
 ```
+## activity_main.xml
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".MainActivity">
 
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter a number"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/buttonFactorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calculate Factorial"
+        app:icon="@android:drawable/star_big_on" />
+
+    <Button
+        android:id="@+id/buttonExplicit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Explicit Intent"/>
+
+</LinearLayout>
+```
+## acitvity_second.xml
+```
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/design_default_color_error"
+    android:padding="16dp"
+    tools:context=".SecondActivity">
+
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="20sp" />
+
+</RelativeLayout>
+```
 ## OUTPUT
-![Screenshot (441)](https://github.com/ArpanBardhan/ExplicitIntent-MAD/assets/119405037/8b54523b-f3ab-4235-bdb4-136b4ad9a531)
-![Screenshot (442)](https://github.com/ArpanBardhan/ExplicitIntent-MAD/assets/119405037/36e4d3cd-da34-4c00-8423-79f1732e6b3c)
-![Screenshot (443)](https://github.com/ArpanBardhan/ExplicitIntent-MAD/assets/119405037/3f4dee9e-30a0-44c3-9747-4d5c7a1495cd)
-![Screenshot (444)](https://github.com/ArpanBardhan/ExplicitIntent-MAD/assets/119405037/de481b19-6543-4287-b55e-6a2dbee64490)
-![Screenshot (445)](https://github.com/ArpanBardhan/ExplicitIntent-MAD/assets/119405037/8779b133-2357-48b5-836b-f248c1692afc)
+![Explicitintent1](https://github.com/BalaSathiesh/ExplicitIntent-MAD/assets/128462891/d42cfddf-8bd6-440b-9a22-687a52e92581)
+![Explicitintent2](https://github.com/BalaSathiesh/ExplicitIntent-MAD/assets/128462891/7d62f49f-a953-4733-8181-6592dd4299e8)
+![Explicitintent3](https://github.com/BalaSathiesh/ExplicitIntent-MAD/assets/128462891/1b346825-0472-46d2-83b3-1591a7024221)
+![Explicitintent4](https://github.com/BalaSathiesh/ExplicitIntent-MAD/assets/128462891/0d06f10f-558e-489c-bdc3-3532e451ce90)
 
 
 
